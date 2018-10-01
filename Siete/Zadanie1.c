@@ -11,7 +11,7 @@ int main()
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
 	u_int i = 0;
-	int res,dlzkaAPI;
+	int res,dlzkaAPI,dlzkaMedium,typ;
 	int framecounter = 0;
 
 
@@ -47,6 +47,24 @@ int main()
 		printf("ramec %d\n", ++framecounter);
 		dlzkaAPI = header->len;
 		printf("dlzka ramca poskytnuta pcap API - %d B\n", dlzkaAPI);
+		if (dlzkaAPI < 60)
+		{
+			dlzkaMedium = 64;
+		}
+		else 
+		{
+			dlzkaMedium = dlzkaAPI + 4;
+		}
+		printf("dlzka ramca prenasaneho po mediu - %d B\n", dlzkaMedium);
+		//printf("%.2x %.2x\n",pkt_data[12],pkt_data[13]);
+		typ = pkt_data[12] * 256 + pkt_data[13];
+		if (typ > 1500) printf("Ethernet II\n");
+		else
+		{
+			if (pkt_data[13] == 170) printf("IEEE 802.3 LLC + SNAP\n");
+			else if (pkt_data[13] == 255) printf("IEEE 802.3 - RAW\n");
+			else printf("IEEE 802.3 LLC\n");
+		}
 
 	}
 }
