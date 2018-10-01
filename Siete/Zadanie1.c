@@ -65,6 +65,21 @@ int main()
 			else if (pkt_data[13] == 255) printf("IEEE 802.3 - RAW\n");
 			else printf("IEEE 802.3 LLC\n");
 		}
+		printf("Zdrojova MAC adressa : ");
+		for (i = 6; i < 12; i++) printf("%.2x ", pkt_data[i]);
+		printf("\n");
+		printf("Cielova MAC adressa : ");
+		for (i = 0; i < 6; i++) printf("%.2x ", pkt_data[i]);
+		printf("\n");
+		for (i = 1; (i < header->caplen+1); i++)
+		{
+			if (((i-1) % 8) == 0) printf("  ");
+			printf("%.2x ", pkt_data[i-1]);
+			if ((i % LINE_LEN) == 0) printf("\n");
+		}
+
+
+		printf("\n");
 
 	}
 }
