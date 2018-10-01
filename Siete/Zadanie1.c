@@ -11,8 +11,8 @@ int main()
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
 	u_int i = 0;
-	int res;
-
+	int res,dlzkaAPI;
+	int framecounter = 0;
 
 
 	/* Create the source string according to the new WinPcap syntax */
@@ -42,28 +42,11 @@ int main()
 		return -1;
 	}
 
-	/* Retrieve the packets from the file */
 	while ((res = pcap_next_ex(fp, &header, &pkt_data)) >= 0)
 	{
-		/* print pkt timestamp and pkt len */
-		printf("%ld:%ld (%ld)\n", header->ts.tv_sec, header->ts.tv_usec, header->len);
+		printf("ramec %d\n", ++framecounter);
+		dlzkaAPI = header->len;
+		printf("dlzka ramca poskytnuta pcap API - %d B\n", dlzkaAPI);
 
-		/* Print the packet */
-		for (i = 1; (i < header->caplen + 1); i++)
-		{
-			printf("%.2x ", pkt_data[i - 1]);
-			if ((i % LINE_LEN) == 0) printf("\n");
-		}
-
-		printf("\n\n");
-		fprintf("\n\n");
 	}
-
-
-	if (res == -1)
-	{
-		printf("Error reading the packets: %s\n", pcap_geterr(fp));
-	}
-
-	return 0;
 }
