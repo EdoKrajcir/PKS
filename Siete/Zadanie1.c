@@ -46,7 +46,6 @@ int main()
 	{
 		while ((res = pcap_next_ex(fp, &header, &pkt_data)) >= 0)
 		{
-			//ARPKOM *komhead,*pom, *novy;
 			++framecounter;
 			typ = pkt_data[12] * 256 + pkt_data[13];
 			if (typ == 2054)
@@ -56,6 +55,7 @@ int main()
 				{
 					comcounter++;
 					printf("Komunikacia c.%d\n", comcounter);
+					fprintf(vystup, "Komunikacia c.%d\n", comcounter);
 				}
 			
 			
@@ -65,21 +65,34 @@ int main()
 			
 				
 				
-						if (reqrep == 1) printf("ARP-Request, "); else printf("ARP-Reply, ");
+					if (reqrep == 1) { printf("ARP-Request, "); fprintf(vystup, "ARP-Request, "); }
+					else
+					{
+						printf("ARP-Reply, ");
+						fprintf(vystup, "ARP-Reply, ");
+					}
+						fprintf(vystup, " IP adresa: %d.", pkt_data[38]);
 						printf(" IP adresa: %d.", pkt_data[38]);
+						fprintf(vystup, "%d.", pkt_data[39]);
 						printf("%d.", pkt_data[39]);
+						fprintf(vystup, "%d.", pkt_data[40]);
 						printf("%d.", pkt_data[40]);
+						fprintf(vystup, "%d, ", pkt_data[41]);
 						printf("%d, ", pkt_data[41]);
 						if (reqrep == 1) printf("MAC adresa: ???\n"); 
 						else
 						{
 							printf("MAC adresa : ");
+							fprintf(vystup, "MAC adresa : ");
 							for (i = 22; i < 28; i++)
 							{
 								printf("%.2x", pkt_data[i]);
+								fprintf(vystup, "%.2x", pkt_data[i]);
 								printf(" ");
+								fprintf(vystup, " ");
 							}
 							printf("\n");
+							fprintf(vystup, "\n");
 						}
 							/////////////////////////sem este dopis tie blbe IPcky
 							printf("Zdrojova IP: ");
@@ -94,6 +107,18 @@ int main()
 							printf("%d", pkt_data[41]);
 							printf("\n");
 							printf("Ramec %d\n", framecounter);
+							fprintf(vystup,"Zdrojova IP: ");
+							fprintf(vystup, "%d.", pkt_data[28]);
+							fprintf(vystup, "%d.", pkt_data[29]);
+							fprintf(vystup, "%d.", pkt_data[30]);
+							fprintf(vystup, "%d", pkt_data[31]);
+							fprintf(vystup, " Cielova IP: ");
+							fprintf(vystup, "%d.", pkt_data[38]);
+							fprintf(vystup, "%d.", pkt_data[39]);
+							fprintf(vystup, "%d.", pkt_data[40]);
+							fprintf(vystup, "%d", pkt_data[41]);
+							fprintf(vystup, "\n");
+							fprintf(vystup, "Ramec %d\n", framecounter);
 							//printf("\n");
 							//printf("\n");
 							//zvysne vypisy ako su aj v bode 1-------------------------------------------------------
@@ -177,7 +202,7 @@ int main()
 		
 		
 		
-			typ = pkt_data[12] * 256 + pkt_data[13];
+			/*typ = pkt_data[12] * 256 + pkt_data[13];
 			if (typ > 1500)
 			{
 				if (typ == 2048)
@@ -227,7 +252,7 @@ int main()
 					}
 				}
 
-			}
+			}*/
 			for (i = 1; (i < header->caplen+1); i++)
 			{
 				if (((i - 1) % 8) == 0 && (i - 1) % 16 == 8) { printf("  "); fprintf(vystup, "  "); }
@@ -281,7 +306,8 @@ int main()
 						}
 						printf("dlzka ramca prenasaneho po mediu - %d B\n", dlzkaMedium);
 						fprintf(vystup, "dlzka ramca prenasaneho po mediu - %d B\n", dlzkaMedium);
-						printf("Ethernet II\n"); fprintf(vystup, "Ethernet II\n");
+						printf("Ethernet II\n"); 
+						fprintf(vystup, "Ethernet II\n");
 						printf("Zdrojova MAC adressa : ");
 						fprintf(vystup, "Zdrojova MAC adressa : ");
 						for (i = 6; i < 12; i++) { printf("%.2x ", pkt_data[i]); fprintf(vystup, "%.2x ", pkt_data[i]); }
