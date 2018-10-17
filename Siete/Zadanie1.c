@@ -13,8 +13,9 @@ int main()
 	char subor[150];
 	FILE *vystup;
 	u_int i = 0;
-	int res,dlzkaAPI,dlzkaMedium,typ,pozicia,pom1,pom2;
+	int res,dlzkaAPI,dlzkaMedium,typ,pozicia,pom1,pom2,request=2,comcounter = 0,reqrep;
 	int framecounter = 0;
+	int arpip[4];
 	printf("zadaj cestu k suboru PCAP : ramce/trace-26.pcap\n");
 	printf("maximalna dlzka cesty je 150 znakov\n");
 	gets(subor);
@@ -35,7 +36,46 @@ int main()
 		fprintf(stderr, "\nNepodarilo sa otvorit subor %s.\n", source);
 		return -1;
 	}
+	//-------------------------------------------------------------------------------------------------------
+	while ((res = pcap_next_ex(fp, &header, &pkt_data)) >= 0)
+	{
+		++framecounter;
+		typ = pkt_data[12] * 256 + pkt_data[13];
+		if (typ == 2054)
+			//ak bolo naposledy reply tak napis cislo komunikacie
+		{
+			if (request == 2)
+			{
+				comcounter++;
+				printf("Komunikacia c.%d\n", comcounter);
+			}
+			reqrep = pkt_data[20] * 256 + pkt_data[21];
+			if (reqrep == 2) request = 2; else request = 1;
+			
+			//switch (request)
+				//case 1:
+			if (reqrep == 1) printf("ARP-Request, \n"); else printf("ARP-Reply, \n");
+					/////////////////////////sem este dopis tie blbe IPcky
+					printf("Ramec %d\n",framecounter);
+					printf("\n");
+					printf("%d.", pkt_data[28]);
+					printf("%d.", pkt_data[29]);
+					printf("%d.", pkt_data[30]);
+					printf("%d.", pkt_data[31]);
+					printf("\n");
+					printf("%d.", pkt_data[38]);
+					printf("%d.", pkt_data[39]);
+					printf("%d.", pkt_data[40]);
+					printf("%d.", pkt_data[41]);
+					printf("\n");
+					printf("\n");
+					printf("\n");
+		}
 
+	}
+
+	//-------------------------------------------------------------------------------------------------------
+	/*
 	while ((res = pcap_next_ex(fp, &header, &pkt_data)) >= 0)
 	{
 		printf("ramec %d\n", ++framecounter);
@@ -143,5 +183,5 @@ int main()
 		}
 		printf("\n");
 		fprintf(vystup,"\n");
-
+		*/
 	}
