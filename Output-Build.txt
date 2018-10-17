@@ -1,0 +1,7 @@
+﻿1>------ Build started: Project: Siete, Configuration: Debug Win32 ------
+1>Zadanie1.c
+1>c:\users\hp\source\repos\siete\siete\zadanie1.c(22): warning C4013: 'gets' undefined; assuming extern returning int
+1>c:\users\hp\source\repos\siete\siete\zadanie1.c(18): warning C4101: 'arpip': unreferenced local variable
+1>Siete.vcxproj -> C:\Users\HP\source\repos\Siete\Debug\Siete.exe
+1>Done building project "Siete.vcxproj".
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
